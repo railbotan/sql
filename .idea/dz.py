@@ -2,6 +2,11 @@ import numpy as np
 import pandas as pd
 import sqlite3
 import matplotlib.pyplot as plt
+import re
+
+
+def get_clean_field(field):
+    return re.sub(r'\<[^>]*\>', '', str(field))
 
 fail = sqlite3.connect('works.sqlite')
 cursor = fail.cursor()
@@ -19,6 +24,8 @@ cursor.execute('create table works ('
 fail.commit()
 
 read_fail = pd.read_csv("works.csv")
+read_fail['skills'] = read_fail['skills'].apply(get_clean_field)
+read_fail['otherInfo'] = read_fail['otherInfo'].apply(get_clean_field)
 read_fail.to_sql("works", fail, if_exists='append', index=False)
 fail.commit()
 
