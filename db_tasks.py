@@ -1,7 +1,11 @@
 import sqlite3
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
+import re
+
+
+def get_clean_field(field):
+    return re.sub(r'\<[^>]*\>', '', str(field))
+
 
 # создание базы данных и таблицы works
 con = sqlite3.connect('works.sqlite')
@@ -20,9 +24,14 @@ cursor.execute('create table works ('
 con.commit()
 
 df = pd.read_csv("works.csv")
+# ДЗ Скиллы и other info
+# очистка поля skills от html тегов
+df['skills'] = df['skills'].apply(get_clean_field)
+# очистка поля otherInfo от html тегов
+df['otherInfo'] = df['otherInfo'].apply(get_clean_field)
+
 df.to_sql("works", con, if_exists='append', index=False)
 con.commit()
-
 
 # ДЗ
 # Создание справочника по полю gender
@@ -77,8 +86,7 @@ con.commit()
 # print(cursor.fetchall())
 
 
-
-# Работа на паре
+# РАБОТА НА ПАРЕ
 # cursor.execute('create index salary_index on works (salary)')
 # con.commit()
 # # количество всех записей
