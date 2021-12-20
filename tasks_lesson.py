@@ -12,7 +12,7 @@ cursor.execute('create table if not exists works (ID INTEGER PRIMARY KEY AUTOINC
 
 df = pd.read_csv('works.csv')
 df.to_sql('works', con, if_exists="append", index=False)
-#print(cursor.execute("select * from works limit 5").fetchall())  +++++++++++++++++++++++++
+print(cursor.execute("select * from works limit 5").fetchall())  
 
 # Задача 2
 # Сейчас размер файла составляет 6.3MB
