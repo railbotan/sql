@@ -2,6 +2,13 @@ import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import re
+
+
+def delete_html(field):
+    return re.sub(r'\<[^>]*\>', '', str(field))
+
+
 
 con = sqlite3.connect('works.sqlite')
 cursor = con.cursor()
@@ -21,6 +28,10 @@ con.commit()
 df = pd.read_csv("works.csv")
 df.to_sql("works", con, if_exists='append', index=False)
 con.commit()
+
+# Вторая часть ДЗ
+df['skills'] = df['skills'].apply(delete_html)
+df['otherInfo'] = df['otherInfo'].apply(delete_html)
 
 #Работа на паре
 cursor.execute('create index salary_index on works (salary)')
